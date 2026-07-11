@@ -189,6 +189,8 @@ export function DynamicTable({ data }: { data: any[] }) {
   );
 }
 ```
+<img width="581" height="695" alt="image" src="https://github.com/user-attachments/assets/1f4480a6-a6bf-4fee-80f6-885ba7b0fec5" />
+
 
 ---
 
