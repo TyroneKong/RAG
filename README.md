@@ -1,6 +1,6 @@
 # local-ai-db-explorer
 
-An enterprise-grade **Generative UI Database Explorer** built with Next.js, the Vercel AI SDK, and Drizzle ORM. 
+An enterprise-grade **Generative UI Database Explorer and RAG Assistant** built with Next.js, the Vercel AI SDK, and Drizzle ORM. 
 
 Instead of relying on hardcoded API routes and static frontend layouts, this application leverages a local **Llama 3.1** model running via **Ollama** as an intelligent orchestrator. The AI dynamically translates plain English user intent into type-safe database actions, inspects schema metadata in-memory to prevent injection attacks, and streams raw database payloads directly into dynamically generated **TanStack Table** views.
 
@@ -199,3 +199,6 @@ export function DynamicTable({ data }: { data: any[] }) {
 *   [ ] **Human-in-the-Loop Write Safeguards:** Add an interactive step for mutative tools (`INSERT`/`UPDATE`/`DELETE`) where the LLM produces a change card requiring manual button authorization before hitting Postgres.
 *   [ ] **Generative Analytics:** Add a `generateChartData` tool that hooks raw relational payloads directly into beautiful chart layouts (`shadcn/ui` charts / Recharts).
 # RAG
+
+<img width="1904" height="2003" alt="image" src="https://github.com/user-attachments/assets/f6247bee-4849-4968-af81-66b6a3ab6d9f" />
+
