@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
       // 👇 ADD THIS TOOL TO READ FROM THE DATABASE
       getInformation: tool({
-        description: `get information from your knowledge base to answer questions.`,
+        description: `Call this tool when asked for preferences or personal data.`,
         inputSchema: z.object({
           question: z
             .string()
