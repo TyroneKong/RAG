@@ -8,8 +8,27 @@ import {
   UIMessage,
 } from "ai";
 import { ollama, streamText } from "ai-sdk-ollama";
-import * as schema from "@/lib/db/schema/users";
+import { getTableName, is } from "drizzle-orm";
+import { PgTable } from "drizzle-orm/pg-core";
+import * as usersSchema from "@/lib/db/schema/users";
+import * as resourcesSchema from "@/lib/db/schema/resources";
+import * as embeddingsSchema from "@/lib/db/schema/embeddings";
 import { db } from "@/lib/db";
+
+// Map keyed by the actual SQL table name ("users", "resources", "embeddings")
+// so the LLM can reference tables by their real names instead of JS export
+// symbols (e.g. "usersTable").
+const tables: Record<string, PgTable> = Object.fromEntries(
+  (
+    [
+      ...Object.values(usersSchema),
+      ...Object.values(resourcesSchema),
+      ...Object.values(embeddingsSchema),
+    ] as unknown[]
+  )
+    .filter((v): v is PgTable => is(v, PgTable))
+    .map((t) => [getTableName(t), t]),
+);
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
@@ -20,7 +39,7 @@ export async function POST(req: Request) {
     model: ollama("llama3.1") as any,
     messages: await convertToModelMessages(messages),
     system:
-      "You are a helpful assistant. Always check your knowledge base before amswering questions. Only respond to questions using tool calls, if no relevant information is found in the tool calls, respond sorry Tyrone I dont know the answer to that question.",
+      "You are a helpful assistant. Always check your knowledge base before answering questions. Only respond to questions using tool calls, if no relevant information is found in the tool calls, respond sorry Tyrone I dont know the answer to that question.",
     tools: {
       addResource: tool({
         description: `add a resource to your knowledge base.`,
@@ -74,10 +93,10 @@ export async function POST(req: Request) {
             .describe("The validated name of the database table to query"),
         }),
         execute: async ({ tableName }) => {
-          const targetTable = schema[tableName as keyof typeof schema];
+          const targetTable = tables[tableName];
           if (!targetTable) {
             return {
-              error: `Table ${tableName} does not exist in the application schema`,
+              error: `Table ${tableName} does not exist. Available tables: ${Object.keys(tables).join(", ")}`,
             };
           }
           return await db.select().from(targetTable);

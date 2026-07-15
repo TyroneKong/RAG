@@ -4,7 +4,7 @@ import postgres from "postgres";
 import { env } from "@/lib/env.mjs";
 import { usersTable } from "./schema/users";
 const client = postgres(env.DATABASE_URL);
-export const db = drizzle(client);
+export const db = drizzle({ client });
 
 async function main() {
   const user: typeof usersTable.$inferInsert = {

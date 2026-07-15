@@ -8,20 +8,39 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 
-const DynamicTable = ({ data }: { data: any[] }) => {
+const DynamicTable = ({ data }: { data: any }) => {
+  const rows = useMemo<any[]>(
+    () => (Array.isArray(data) ? data : []),
+    [data],
+  );
+
   const columns = useMemo(() => {
-    if (!data || data.length === 0) return [];
-    return Object.keys(data[0]).map((key) => ({
+    if (rows.length === 0) return [];
+    return Object.keys(rows[0]).map((key) => ({
       accessorKey: key,
-      header: key.replace(/_/g, " ").replace(/�\w/g, (c) => c.toUpperCase()),
+      header: key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
     }));
-  }, [data]);
+  }, [rows]);
 
   const table = useReactTable({
-    data,
+    data: rows,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (!Array.isArray(data)) {
+    return (
+      <pre className="text-xs text-red-400 whitespace-pre-wrap">
+        {JSON.stringify(data, null, 2)}
+      </pre>
+    );
+  }
+
+  if (rows.length === 0) {
+    return (
+      <div className="text-xs text-slate-400 p-3">No rows returned.</div>
+    );
+  }
 
   return (
     <div className="overflow-x-auto border border-slate-800 rounded-lg">

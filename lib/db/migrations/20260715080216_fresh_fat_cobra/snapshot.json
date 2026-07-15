@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "eb0b071c-59f2-4e87-85d0-29196f81f300",
+  "id": "a2a1ed2f-8ca2-47cf-b61d-6f42780fc9f6",
   "prevIds": [
-    "e4ee53ae-b57c-43da-b6b5-3f8c4bfbbd6d"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -129,29 +129,20 @@
       "table": "resources"
     },
     {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
-      "default": null,
+      "default": "gen_random_uuid()",
       "generated": null,
-      "identity": {
-        "type": "always",
-        "name": "users_id_seq",
-        "increment": "1",
-        "startWith": "1",
-        "minValue": "1",
-        "maxValue": "2147483647",
-        "cache": 1,
-        "cycle": false
-      },
+      "identity": null,
       "name": "id",
       "entityType": "columns",
       "schema": "public",
       "table": "users"
     },
     {
-      "type": "varchar(255)",
+      "type": "varchar(100)",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -166,7 +157,7 @@
     {
       "type": "integer",
       "typeSchema": null,
-      "notNull": true,
+      "notNull": false,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -185,6 +176,19 @@
       "generated": null,
       "identity": null,
       "name": "email",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
       "entityType": "columns",
       "schema": "public",
       "table": "users"
@@ -225,7 +229,7 @@
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "embeddings_resource_id_resources_id_fk",
+      "name": "embeddings_resource_id_resources_id_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "embeddings"
@@ -266,10 +270,17 @@
         "email"
       ],
       "nullsNotDistinct": false,
-      "name": "users_email_unique",
+      "name": "users_email_key",
       "schema": "public",
       "table": "users",
       "entityType": "uniques"
+    },
+    {
+      "value": "\"age\" >= 0",
+      "name": "users_age_check",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
     }
   ],
   "renames": []
