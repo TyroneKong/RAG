@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       "You are a helpful assistant. Always check your knowledge base before answering questions. Only respond to questions using tool calls, if no relevant information is found in the tool calls, respond sorry Tyrone I dont know the answer to that question.",
     tools: {
       addResource: tool({
-        description: `add a resource to your knowledge base.`,
+        description: `call this tool when given information about preference and add a resource to your knowledge base.`,
         inputSchema: z.object({
           content: z
             .string()
